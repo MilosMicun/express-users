@@ -39,6 +39,18 @@ app.get("/users/:id", async (req, res) => {
   }
 });
 
+app.get("/sum", (req, res) => {
+  const a = req.query.a;
+  const b = req.query.b;
+
+  if (a === undefined || b === undefined) return res.send("Missing parameters");
+
+  const sum = Number(a) + Number(b);
+  if (isNaN(sum)) return res.send("Invalid numbers");
+
+  res.json({ sum });
+});
+
 app.listen(3002, () => {
   console.log("Server running on port 3002");
 });
