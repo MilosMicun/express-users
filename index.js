@@ -11,6 +11,14 @@ app.get("/users", async (req, res) => {
   try {
     const data = await fs.readFile("./users.json", "utf-8");
     const users = JSON.parse(data);
+
+    const { active } = req.query;
+    if (active !== undefined) {
+      const isActive = active === "true";
+      const filtered = users.filter(user => user.active === isActive);
+      return res.json(filtered);
+    }
+
     res.json(users);
   } catch (err) {
     console.error(err.message);
