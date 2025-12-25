@@ -13,7 +13,20 @@ app.get("/users", async (req, res) => {
     const users = JSON.parse(data);
     res.json(users);
   } catch (err) {
-    console.error("Error reading users.json:", err.message);
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/users/:id", async (req, res) => {
+  try {
+    const data = await fs.readFile("./users.json", "utf-8");
+    const users = JSON.parse(data);
+    const user = users.find(u => u.id === Number(req.params.id));
+    if (!user) return res.status(404).send("User not found");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Server error");
   }
 });
